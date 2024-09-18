@@ -62,8 +62,21 @@ export function Range({ type }: RangeProps) {
     rightBulletRef.current.style.left = `${rightBulletPosition}%`;
   };
 
-  const handleInputChange = () => {
-    console.log("input change");
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    side: string,
+  ) => {
+    if (Number(e.target.value) < 0 || Number(e.target.value) > 100) return;
+
+    if (side === "left") {
+      setLeftMinPosition(Number(e.target.value));
+
+      leftBulletRef.current.style.left = `${Number(e.target.value)}%`;
+    } else if (side === "right") {
+      setRightMinPosition(Number(e.target.value));
+
+      rightBulletRef.current.style.left = `${Number(e.target.value)}%`;
+    }
   };
 
   return (
@@ -72,18 +85,24 @@ export function Range({ type }: RangeProps) {
         className="absolute inset-0 h-2 max-w-2xl rounded-xl bg-white"
         ref={barRef}
       >
-        <span
-          onClick={handleInputChange}
-          className="text-md absolute -left-10 top-[50%] translate-y-[-50%] cursor-pointer font-semibold text-white"
-        >
-          {leftMinPosition}
-        </span>
-        <span
-          onClick={handleInputChange}
-          className="text-md absolute -right-10 top-[50%] translate-y-[-50%] cursor-pointer font-semibold text-white"
-        >
-          {rightMinPosition}
-        </span>
+        <input
+          value={leftMinPosition}
+          className="text-md absolute -left-[70px] top-[50%] max-w-[60px] translate-y-[-50%] cursor-pointer rounded-lg p-1 font-semibold text-black"
+          onChange={(e) => handleInputChange(e, "left")}
+          min="0"
+          max="100"
+          type="number"
+        />
+
+        <input
+          value={rightMinPosition}
+          className="text-md absolute -right-[70px] top-[50%] max-w-[60px] translate-y-[-50%] cursor-pointer rounded-lg p-1 font-semibold text-black"
+          onChange={(e) => handleInputChange(e, "right")}
+          min="0"
+          max="100"
+          type="number"
+        />
+
         <div
           ref={leftBulletRef}
           onDrag={handleLeftDrag}
