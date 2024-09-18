@@ -1,15 +1,32 @@
 "use client";
 
-import { type DragEvent, useRef, useState } from "react";
+import { type ChangeEvent, type DragEvent, useRef, useState } from "react";
 
 const rangeType = {
   NORMAL: "normal",
   FIXED: "fixed",
 } as const;
 
+const rangeValues = {
+  MIN: 0,
+  MAX: 100,
+} as const;
+
 interface RangeProps {
   type: typeof rangeType.NORMAL | typeof rangeType.FIXED;
 }
+
+const canMove = (bulletPosition: number): boolean => {
+  return bulletPosition >= rangeValues.MIN && bulletPosition <= rangeValues.MAX;
+};
+
+const exceedsLimit = (
+  value: number,
+  threshold: number,
+  side: string,
+): boolean => {
+  return side === "left" ? value >= threshold : value <= threshold;
+};
 
 export function Range({ type }: RangeProps) {
   const leftBulletRef = useRef<HTMLDivElement>(null);
@@ -30,14 +47,18 @@ export function Range({ type }: RangeProps) {
 
     if (!barOffset || !barWidth || !windowXPosition) return;
 
-    const leftBulletPosition = (
+    const leftBulletPosition = +(
       ((windowXPosition - barOffset) / barWidth) *
       100
     ).toFixed(0);
-    if (Number(leftBulletPosition) < 0 || Number(leftBulletPosition) > 100)
+
+    if (
+      !canMove(leftBulletPosition) ||
+      exceedsLimit(leftBulletPosition, rightMinPosition, "left")
+    )
       return;
 
-    setLeftMinPosition(Number(leftBulletPosition));
+    setLeftMinPosition(leftBulletPosition);
 
     leftBulletRef.current.style.left = `${leftBulletPosition}%`;
   };
@@ -50,14 +71,18 @@ export function Range({ type }: RangeProps) {
 
     if (!barOffset || !barWidth || !windowXPosition) return;
 
-    const rightBulletPosition = (
+    const rightBulletPosition = +(
       ((windowXPosition - barOffset) / barWidth) *
       100
     ).toFixed(0);
-    if (Number(rightBulletPosition) < 0 || Number(rightBulletPosition) > 100)
+
+    if (
+      !canMove(rightBulletPosition) ||
+      exceedsLimit(rightBulletPosition, leftMinPosition, "right")
+    )
       return;
 
-    setRightMinPosition(Number(rightBulletPosition));
+    setRightMinPosition(rightBulletPosition);
 
     rightBulletRef.current.style.left = `${rightBulletPosition}%`;
   };
@@ -66,23 +91,25 @@ export function Range({ type }: RangeProps) {
     e: ChangeEvent<HTMLInputElement>,
     side: string,
   ) => {
-    if (Number(e.target.value) < 0 || Number(e.target.value) > 100) return;
+    const inputValue = +e.target.value;
 
-    if (side === "left") {
-      setLeftMinPosition(Number(e.target.value));
+    if (inputValue < 0 || inputValue > 100) return;
 
-      leftBulletRef.current.style.left = `${Number(e.target.value)}%`;
-    } else if (side === "right") {
-      setRightMinPosition(Number(e.target.value));
+    if (side === "left" && inputValue < rightMinPosition) {
+      setLeftMinPosition(inputValue);
 
-      rightBulletRef.current.style.left = `${Number(e.target.value)}%`;
+      leftBulletRef.current.style.left = `${inputValue}%`;
+    } else if (side === "right" && inputValue > leftMinPosition) {
+      setRightMinPosition(inputValue);
+
+      rightBulletRef.current.style.left = `${inputValue}%`;
     }
   };
 
   return (
-    <div className="relative h-2 rounded-xl border border-slate-200">
+    <div className="relative h-2 rounded-xl">
       <div
-        className="absolute inset-0 h-2 max-w-2xl rounded-xl bg-white"
+        className="absolute inset-0 h-2 max-w-2xl rounded-xl bg-white/70"
         ref={barRef}
       >
         <input
@@ -107,14 +134,14 @@ export function Range({ type }: RangeProps) {
           ref={leftBulletRef}
           onDrag={handleLeftDrag}
           draggable
-          className={`absolute left-[0] top-[50%] block size-4 translate-y-[-50%] rounded-full bg-red-500`}
+          className={`absolute left-[0] top-[50%] block size-4 translate-y-[-50%] rounded-full bg-indigo-400 hover:size-6 hover:cursor-grab`}
         />
         <div
           ref={rightBulletRef}
           onDrag={handleRightDrag}
           draggable
-          className="absolute right-0 top-[50%] block size-4 translate-y-[-50%] rounded-full bg-red-500"
-        ></div>
+          className="absolute right-0 top-[50%] block size-4 translate-y-[-50%] rounded-full bg-indigo-700"
+        />
       </div>
     </div>
   );
