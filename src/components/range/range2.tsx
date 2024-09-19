@@ -1,7 +1,7 @@
 "use client";
-import { type RangeFixedData, rangeType } from "@/lib/types";
-import { canMove, exceedsLimit } from "@/lib/utils";
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { type RangeFixedData, type rangeType } from "@/lib/types";
+import { canMove, exceedsLimit } from "@/lib/utils";
 
 export type RangeProps = {
   type: typeof rangeType.NORMAL | typeof rangeType.FIXED;
@@ -9,9 +9,6 @@ export type RangeProps = {
 };
 
 export function Range2({ type, data }: RangeProps) {
-  if (type === rangeType.NORMAL) console.log(rangeType.NORMAL);
-  else if (type === rangeType.FIXED) console.log(rangeType.FIXED);
-
   const [leftPosition, setLeftPosition] = useState<number>(0);
   const [rightPosition, setRightPosition] = useState<number>(data.length - 1);
 
@@ -33,16 +30,14 @@ export function Range2({ type, data }: RangeProps) {
 
       document.body.style.cursor = "grabbing";
 
-      const barOffset = barRef.current?.getBoundingClientRect().left;
-      const barWidth = barRef.current?.getBoundingClientRect().width;
+      const barRect = barRef.current?.getBoundingClientRect();
+      const barOffset = barRect?.left || 0;
+      const barWidth = barRect?.width || 0;
       const windowXPosition = e.clientX;
-      const bulletWidth = leftBulletRef.current?.offsetWidth || 0;
 
-      if (!barOffset || !barWidth || !windowXPosition) return;
+      if (!barWidth) return;
 
-      const relativePosition =
-        (windowXPosition - barOffset - bulletWidth / 2) / barWidth;
-
+      const relativePosition = (windowXPosition - barOffset) / barWidth;
       const newIndex = Math.round(relativePosition * (data.length - 1));
 
       if (newIndex < 0 || newIndex > data.length - 1) return;
@@ -53,7 +48,6 @@ export function Range2({ type, data }: RangeProps) {
           !exceedsLimit(newIndex, rightPosition, "left")
         ) {
           setLeftPosition(newIndex);
-          leftBulletRef.current!.style.left = `${(newIndex / (data.length - 1)) * 100}%`;
         }
       }
 
@@ -63,11 +57,10 @@ export function Range2({ type, data }: RangeProps) {
           !exceedsLimit(newIndex, leftPosition, "right")
         ) {
           setRightPosition(newIndex);
-          rightBulletRef.current!.style.left = `${(newIndex / (data.length - 1)) * 100}%`;
         }
       }
     },
-    [isDragging, activeBullet, barRef, leftPosition, rightPosition, data],
+    [isDragging, activeBullet, data.length, leftPosition, rightPosition],
   );
 
   const handleMouseUp = () => {
@@ -86,32 +79,41 @@ export function Range2({ type, data }: RangeProps) {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, leftPosition, rightPosition, activeBullet, handleMouseMove]);
+  }, [isDragging, handleMouseMove]);
+
+  const getBulletStyle = (position: number) => {
+    const percentage = (position / (data.length - 1)) * 100;
+    if (percentage <= 0) return { left: "0" };
+    if (percentage >= 100) return { right: "0" };
+    return { left: `${percentage}%` };
+  };
 
   return (
     <div className="relative h-2 rounded-xl">
       <div
-        className="absolute inset-0 h-8 max-w-2xl rounded-2xl bg-white/70"
+        className="absolute inset-0 h-8 max-w-2xl rounded-md bg-white/70"
         ref={barRef}
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="text-md absolute -left-[70px] top-[50%] max-w-[60px] translate-y-[-50%] rounded-lg bg-white p-1 px-4 py-2 font-semibold text-black">
-          {data[leftPosition]!.toFixed(2)}{" "}
+        <label className="text-md absolute -left-[70px] top-1/2 max-w-[60px] -translate-y-1/2 rounded-md bg-white p-1 font-semibold text-black">
+          {data[leftPosition]?.toFixed(2)}
         </label>
-        <label className="text-md absolute -right-[70px] top-[50%] max-w-[60px] translate-y-[-50%] rounded-lg bg-white p-1 px-4 py-2 font-semibold text-black">
-          {data[rightPosition]!.toFixed(2)}{" "}
+        <label className="text-md absolute -right-[70px] top-1/2 max-w-[60px] -translate-y-1/2 rounded-md bg-white p-1 font-semibold text-black">
+          {data[rightPosition]?.toFixed(2)}
         </label>
 
         <div
           ref={leftBulletRef}
           draggable
           onMouseDown={() => handleMouseDown("left")}
-          className="absolute left-0 top-[50%] block size-8 translate-y-[-50%] cursor-grab rounded-full bg-indigo-400 hover:size-10 active:z-10 active:size-10 active:cursor-grabbing"
+          className="absolute top-1/2 size-8 -translate-y-1/2 cursor-grab rounded-md bg-indigo-400 hover:size-10 active:z-10 active:size-10 active:cursor-grabbing"
+          style={getBulletStyle(leftPosition)}
         />
         <div
           ref={rightBulletRef}
           onMouseDown={() => handleMouseDown("right")}
-          className="absolute right-0 top-[50%] block size-8 translate-y-[-50%] cursor-grab rounded-full bg-indigo-700 hover:size-10 active:size-10 active:cursor-grabbing"
+          className="absolute top-1/2 size-8 -translate-y-1/2 cursor-grab rounded-md bg-indigo-700 hover:size-10 active:size-10 active:cursor-grabbing"
+          style={getBulletStyle(rightPosition)}
         />
       </div>
     </div>

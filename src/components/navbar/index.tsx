@@ -33,6 +33,15 @@ export function Navbar() {
                 Blog
               </a>
             </li>
+            <li>
+              <a
+                className="hover:text-indigo-400"
+                href="mailto:codinaroger2@gmail.com"
+                aria-label="mail contact"
+              >
+                Hire me! 😁
+              </a>
+            </li>
           </ul>
           <a
             href="https://github.com/Cudi7"
