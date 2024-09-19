@@ -1,34 +1,10 @@
 "use client";
 
+import { type RangeProps } from "@/lib/types";
+import { canMove, exceedsLimit } from "@/lib/utils";
 import { type ChangeEvent, type DragEvent, useRef, useState } from "react";
 
-const rangeType = {
-  NORMAL: "normal",
-  FIXED: "fixed",
-} as const;
-
-const rangeValues = {
-  MIN: 0,
-  MAX: 100,
-} as const;
-
-interface RangeProps {
-  type: typeof rangeType.NORMAL | typeof rangeType.FIXED;
-}
-
-const canMove = (bulletPosition: number): boolean => {
-  return bulletPosition >= rangeValues.MIN && bulletPosition <= rangeValues.MAX;
-};
-
-const exceedsLimit = (
-  value: number,
-  threshold: number,
-  side: string,
-): boolean => {
-  return side === "left" ? value >= threshold : value <= threshold;
-};
-
-export function Range({ type }: RangeProps) {
+export function RangeOld({ type }: RangeProps) {
   const leftBulletRef = useRef<HTMLDivElement>(null);
   const rightBulletRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);

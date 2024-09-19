@@ -8,6 +8,8 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    LAMBDA_FN_1_URL: z.string().url(),
+    LAMBDA_FN_2_URL: z.string().url(),
   },
 
   /**
@@ -25,6 +27,8 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    LAMBDA_FN_1_URL: process.env.LAMBDA_FN_1_URL,
+    LAMBDA_FN_2_URL: process.env.LAMBDA_FN_2_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
