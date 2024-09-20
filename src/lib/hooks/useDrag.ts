@@ -21,7 +21,7 @@ import { clamp } from "@/lib/utils";
  * Usage:
  * handleDragging("left", 40, 20, 60, onLeftDrag, onRightDrag, canMove, exceedsLimit);
  */
-const handleDragging = (
+export const handleDragging = (
   activeBullet: string | null,
   newIndex: number,
   leftPosition: number,
@@ -68,7 +68,7 @@ const handleDragging = (
  * Usage:
  * calculateNewIndex(e, barRef, 100, false); // Returns a number between 0 and 100
  */
-const calculateNewIndex = (
+export const calculateNewIndex = (
   e: MouseEvent,
   barRef: React.RefObject<HTMLDivElement>,
   dataLength: number,
@@ -108,7 +108,12 @@ const calculateNewIndex = (
  * Example:
  * const { isDragging, activeBullet, handleMouseDown, handleMouseUp } = useDraggingState();
  */
-function useDraggingState(): object {
+export function useDraggingState(): {
+  isDragging: boolean;
+  activeBullet: string | null;
+  handleMouseDown: (bullet: string) => void;
+  handleMouseUp: () => void;
+} {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeBullet, setActiveBullet] = useState<string | null>(null);
 
@@ -244,7 +249,11 @@ export function useDrag(
     side: string,
   ) => boolean,
   isFixedRange = false,
-): object {
+): {
+  handleMouseDown: (bullet: string) => void;
+  isDragging: boolean;
+  activeBullet: string | null;
+} {
   // Manages the dragging state (isDragging and activeBullet)
   const { isDragging, activeBullet, handleMouseDown, handleMouseUp } =
     useDraggingState();

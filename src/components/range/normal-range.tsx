@@ -62,6 +62,8 @@ export function NormalRange({ data }: NormalRangeProps) {
         className="absolute inset-0 h-8 max-w-2xl rounded-md bg-white/70"
         ref={barRef}
         onMouseDown={(e) => e.preventDefault()}
+        role="slider"
+        aria-valuenow={leftPosition}
       >
         <input
           value={Math.round(leftPosition)}
@@ -87,12 +89,14 @@ export function NormalRange({ data }: NormalRangeProps) {
           onMouseDown={() => handleMouseDown("left")}
           className="absolute left-0 top-[50%] block size-8 -translate-x-1/2 translate-y-[-50%] cursor-grab rounded-md bg-indigo-400 hover:size-10 active:z-10 active:size-10 active:cursor-grabbing"
           style={{ left: `${leftPosition}%` }}
+          id="left-bullet"
         />
         <div
           ref={rightBulletRef}
           onMouseDown={() => handleMouseDown("right")}
           className="absolute right-0 top-[50%] block size-8 -translate-x-1/2 translate-y-[-50%] cursor-grab rounded-md bg-indigo-700 hover:size-10 active:size-10 active:cursor-grabbing"
           style={{ left: `${rightPosition}%` }}
+          id="right-bullet"
         />
       </div>
     </div>

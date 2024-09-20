@@ -65,12 +65,14 @@ export function FixedRange({ data }: RangeProps) {
           onMouseDown={() => handleMouseDown("left")}
           className="absolute top-1/2 size-8 -translate-y-1/2 cursor-grab rounded-md bg-indigo-400 hover:size-10 active:z-10 active:size-10 active:cursor-grabbing"
           style={getBulletStyle(leftPosition)}
+          id="left-bullet"
         />
         <div
           ref={rightBulletRef}
           onMouseDown={() => handleMouseDown("right")}
           className="absolute top-1/2 size-8 -translate-y-1/2 cursor-grab rounded-md bg-indigo-700 hover:size-10 active:size-10 active:cursor-grabbing"
           style={getBulletStyle(rightPosition)}
+          id="right-bullet"
         />
       </div>
     </div>
