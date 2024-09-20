@@ -5,6 +5,8 @@ import { useSelectedLayoutSegment } from "next/navigation";
 export function AppNavLinks() {
   const segment = useSelectedLayoutSegment();
 
+  if (segment === null) return null;
+
   return (
     <>
       <li>

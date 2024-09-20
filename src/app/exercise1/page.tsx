@@ -1,6 +1,5 @@
-import { Range } from "@/components/range/index";
-import { getNormalRangeData } from "@/lib/data/range-data";
-import { rangeType } from "@/lib/types";
+import { NormalRange } from "@/components/range/normal-range";
+import { getNormalRangeData } from "@/lib/data/range";
 
 export default async function Exercice1Page() {
   const data = await getNormalRangeData();
@@ -10,7 +9,7 @@ export default async function Exercice1Page() {
       <h2 className="text-4xl font-extrabold tracking-tight text-white sm:text-[4rem]">
         Exercise 1
       </h2>
-      <Range type={rangeType.NORMAL} data={data} />
+      <NormalRange data={data} />
     </section>
   );
 }

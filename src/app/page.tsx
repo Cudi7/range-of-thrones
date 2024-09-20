@@ -6,7 +6,7 @@ export default function HomePage() {
       <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
         Range <span className="text-[hsl(240,100%,80%)]">of</span> Thrones
       </h1>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
         <Link
           className="flex max-w-xs flex-col gap-4 rounded-xl bg-gray-800/70 p-4 text-white hover:bg-gray-800/90"
           href="/exercise1"
@@ -21,7 +21,7 @@ export default function HomePage() {
           <h3 className="text-2xl font-bold">Exercise 2</h3>
           <div className="text-lg">Fixed number of options range</div>
         </Link>
-      </div>
+      </section>
     </div>
   );
 }

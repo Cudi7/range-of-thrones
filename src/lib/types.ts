@@ -1,16 +1,16 @@
-export const rangeType = {
-  NORMAL: "normal",
-  FIXED: "fixed",
-} as const;
+import { z } from "zod";
 
 export const rangeValues = {
   MIN: 0,
   MAX: 100,
 } as const;
 
-export type RangeNormalData = {
-  min: typeof rangeValues.MIN;
-  max: typeof rangeValues.MAX;
-};
+export const NormalRangeSchema = z.object({
+  min: z.number(),
+  max: z.number(),
+});
 
-export type RangeFixedData = number[];
+export const FixedRangeSchema = z.array(z.number());
+
+export type NormalRangeData = z.infer<typeof NormalRangeSchema>;
+export type FixedRangeData = z.infer<typeof FixedRangeSchema>;

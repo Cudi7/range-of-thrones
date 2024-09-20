@@ -14,7 +14,7 @@ export function Navbar() {
             <li>
               <a
                 className="hover:text-indigo-400"
-                href="https://github.com/Cudi7/AWS-Cloud-Practitioner-Certification-Prep"
+                href="https://aws-cloud-practitioner-certification-prep.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="AWS Project on GitHub"

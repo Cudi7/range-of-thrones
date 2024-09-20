@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "next dev -p 8080 --turbo",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start -p 8080"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.10.1",
