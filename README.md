@@ -6,7 +6,7 @@ This project uses AWS Lambda for data fetching and provides a modern, user-frien
 
 ## Demo
 
-![Range of Thrones Demo](https://range-of-thrones.vercel.app/)
+[Range of Thrones Demo](https://range-of-thrones.vercel.app/)
 
 ## Features
 
