@@ -95,18 +95,26 @@ describe("NormalRange Component", () => {
     render(<NormalRange data={mockData} />);
 
     const leftBullet = document.getElementById("left-bullet");
-    fireEvent.mouseDown(leftBullet);
 
-    expect(mockHandleMouseDown).toHaveBeenCalledWith("left");
+    if (leftBullet) {
+      fireEvent.mouseDown(leftBullet);
+      expect(mockHandleMouseDown).toHaveBeenCalledWith("left");
+    } else {
+      throw new Error("Left bullet not found");
+    }
   });
 
   it("calls handleMouseDown when right bullet is clicked", () => {
     render(<NormalRange data={mockData} />);
 
     const rightBullet = document.getElementById("right-bullet");
-    fireEvent.mouseDown(rightBullet);
 
-    expect(mockHandleMouseDown).toHaveBeenCalledWith("right");
+    if (rightBullet) {
+      fireEvent.mouseDown(rightBullet);
+      expect(mockHandleMouseDown).toHaveBeenCalledWith("right");
+    } else {
+      throw new Error("Right bullet not found");
+    }
   });
 
   it("should not update left position if input value is less than min", () => {
@@ -132,13 +140,21 @@ describe("NormalRange Component", () => {
     fireEvent.change(leftInput, { target: { value: "25" } });
 
     const leftBullet = document.getElementById("left-bullet");
-    expect(leftBullet.style.left).toBe("25%"); // Check that the left bullet has moved
+    if (leftBullet) {
+      expect(leftBullet.style.left).toBe("25%"); // Check that the left bullet has moved
+    } else {
+      throw new Error("Left bullet not found");
+    }
 
     const rightInput = screen.getByDisplayValue("100");
     fireEvent.change(rightInput, { target: { value: "75" } });
 
     const rightBullet = document.getElementById("right-bullet");
-    expect(rightBullet.style.left).toBe("75%"); // Check that the right bullet has moved
+    if (rightBullet) {
+      expect(rightBullet.style.left).toBe("75%"); // Check that the right bullet has moved
+    } else {
+      throw new Error("Right bullet not found");
+    }
   });
   it("should stop propagation when input is clicked", () => {
     render(<NormalRange data={mockData} />);

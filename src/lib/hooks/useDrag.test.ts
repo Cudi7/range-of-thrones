@@ -115,13 +115,16 @@ describe("calculateNewIndex", () => {
         left: 0,
         width: 100,
       }),
-    },
+      addEventListener: jest.fn(), // Add mock for addEventListener
+      removeEventListener: jest.fn(), // Add mock for removeEventListener
+      clientWidth: 100, // Include relevant properties
+    } as unknown as HTMLDivElement, // Cast to HTMLDivElement to satisfy type
   };
 
   it("should return null if barRef is invalid", () => {
     const result = calculateNewIndex(
       createMouseEvent(50),
-      { current: null },
+      { current: null }, // Mock invalid ref
       100,
       false,
     );

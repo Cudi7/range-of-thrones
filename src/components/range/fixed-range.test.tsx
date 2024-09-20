@@ -59,18 +59,26 @@ describe("FixedRange Component", () => {
     render(<FixedRange data={mockData} />);
 
     const leftBullet = document.getElementById("left-bullet");
-    fireEvent.mouseDown(leftBullet);
 
-    expect(mockHandleMouseDown).toHaveBeenCalledWith("left");
+    if (leftBullet) {
+      fireEvent.mouseDown(leftBullet); // Ensure element is not null
+      expect(mockHandleMouseDown).toHaveBeenCalledWith("left");
+    } else {
+      throw new Error("Left bullet not found"); // Optional, throw error if null
+    }
   });
 
   it("calls handleMouseDown when right bullet is clicked", () => {
     render(<FixedRange data={mockData} />);
 
     const rightBullet = document.getElementById("right-bullet");
-    fireEvent.mouseDown(rightBullet);
 
-    expect(mockHandleMouseDown).toHaveBeenCalledWith("right");
+    if (rightBullet) {
+      fireEvent.mouseDown(rightBullet); // Ensure element is not null
+      expect(mockHandleMouseDown).toHaveBeenCalledWith("right");
+    } else {
+      throw new Error("Right bullet not found"); // Optional, throw error if null
+    }
   });
 
   it("calculates bullet style correctly", () => {
