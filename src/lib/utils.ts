@@ -46,8 +46,8 @@ export const exceedsLimit = (
  *
  * Example:
  * rangeValues.MIN = 0, rangeValues.MAX = 100
- * canWriteInput(110, leftBulletRef, rightBulletRef); // returns true (value is out of range)
- * canWriteInput(50, leftBulletRef, rightBulletRef);  // returns false (valid input)
+ * canWriteInput(110, leftBulletRef, rightBulletRef); // returns false (value is out of range)
+ * canWriteInput(50, leftBulletRef, rightBulletRef);  // returns true (valid input)
  */
 export const canWriteInput = (
   val: number,

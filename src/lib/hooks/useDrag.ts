@@ -273,7 +273,6 @@ export function useDrag(
     activeBullet,
   );
 
-  // Set up and clean up event listeners for mousemove and mouseup
   useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
